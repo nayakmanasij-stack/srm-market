@@ -31,6 +31,8 @@ button { border: 0; border-radius: 7px; padding: 11px 16px; background: #255943;
 button:disabled { opacity: .65; cursor: wait; }
 :focus-visible { outline: 2px solid #317d57; outline-offset: 3px; }
 .listing-list { display: grid; gap: 12px; list-style: none; padding: 0; margin: 0; }
+.listing-controls { display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.listing-controls h2 { margin: 0; }
 .listing-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; color: #32654b; }
 .listing-top span { padding: 4px 9px; border-radius: 99px; background: #e1eee3; font-size: .82rem; }
 .listing h3 { font-size: 1.2rem; font-weight: 700; margin: 12px 0 5px; }

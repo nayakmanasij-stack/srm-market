@@ -1,0 +1,33 @@
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            server/package-lock.json
+            client/package-lock.json
+      - name: Test the API
+        working-directory: server
+        run: |
+          npm ci
+          npm test
+      - name: Lint and build the frontend
+        working-directory: client
+        run: |
+          npm ci
+          npm run lint
+          npm run build

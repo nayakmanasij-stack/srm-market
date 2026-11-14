@@ -20,6 +20,10 @@ export default function App() {
   const [saving, setSaving] = useState(false)
   const [feedback, setFeedback] = useState(null)
   const [loadAttempt, setLoadAttempt] = useState(0)
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const visibleListings = selectedCategory
+    ? listings.filter(({ category }) => category === selectedCategory)
+    : listings
 
   useEffect(() => {
     const controller = new AbortController()
@@ -85,12 +89,23 @@ export default function App() {
           </form>
         </section>
         <section className="listings" aria-labelledby="listings-title" aria-busy={loading}>
-          <h2 id="listings-title">Latest listings</h2>
+          <div className="listing-controls">
+            <h2 id="listings-title">Latest listings</h2>
+            <label>
+              Filter by category
+              <select value={selectedCategory} onChange={(event) => setSelectedCategory(event.target.value)}>
+                <option value="">All categories</option>
+                {categories.map((category) => <option key={category}>{category}</option>)}
+              </select>
+            </label>
+          </div>
           {loading && <p role="status">Loading listings…</p>}
           {loadError && <div className="panel"><p role="alert" className="error">{loadError}</p><button type="button" disabled={saving} onClick={retry}>Try again</button></div>}
           {!loading && !loadError && listings.length === 0 && <p className="panel">No listings yet. Post the first item using the form.</p>}
-          {listings.length > 0 && <ul className="listing-list">
-            {listings.map((listing) => <li className="panel listing" key={listing._id}>
+          {!loading && !loadError && listings.length > 0 && visibleListings.length === 0 &&
+            <p className="panel" role="status">No listings in this category.</p>}
+          {visibleListings.length > 0 && <ul className="listing-list">
+            {visibleListings.map((listing) => <li className="panel listing" key={listing._id}>
               <div className="listing-top"><span>{listing.category}</span><strong>{currency.format(listing.price)}</strong></div>
               <h3>{listing.title}</h3>
               <p>{listing.description}</p>
