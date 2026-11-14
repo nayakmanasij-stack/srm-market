@@ -1,22 +1,28 @@
 # SRM Market
 
-An early full-stack prototype for a campus marketplace. The React client is a Vite starter, and the Express server exposes a status endpoint and uses Mongoose to connect to MongoDB. For the working marketplace, see [CampusKArt](https://github.com/nayakmanasij-stack/CampusKArt).
+A full-stack campus marketplace prototype. Use the React interface to publish an item and browse recent listings. Express validates the submission and Mongoose saves it in MongoDB.
+
+[CampusKArt](https://github.com/nayakmanasij-stack/CampusKArt) is the separate deployed marketplace for SRM students.
 
 ## Run locally
 
-Use Node.js 20.19 or newer in the Node.js 20 line, or Node.js 22.13 or newer. Start a local MongoDB instance or use a development database you can access.
+Use Node.js 20.19+ in the Node.js 20 line, Node.js 22.13+ in the Node.js 22 line, or Node.js 24+. Start MongoDB locally or use a development database you can access.
 
-1. Inside `server`, copy `.env.example` to `.env` and set `MONGO_URI` to your development database.
-2. Still inside `server`, run `npm ci` and then `node index.js`.
-3. In a separate terminal, enter `client`, run `npm ci`, then run `npm run dev`. Open the address Vite prints.
+1. Inside `server`, copy `.env.example` to `.env` and set `MONGO_URI`. The example uses a local MongoDB instance.
+2. From `server`, run `npm ci` and `node index.js`. Wait for the MongoDB connection message.
+3. In a second terminal, enter `client`, run `npm ci` and `npm run dev`, then open the address Vite prints.
+4. Submit an item, then reload the page to check that the listing was saved.
 
-The server's status endpoint is at [localhost:5000](http://localhost:5000) by default. A response from that endpoint confirms Express is running. Check the server console for MongoDB connection status.
+The Vite dev server forwards `/api` requests to port 5000. If you change the API port, set `SRM_API_TARGET` when starting Vite. This prototype accepts listings without accounts and is intended for local development. A public deployment should add authentication and route requests from the frontend to the API.
 
-## Project structure
+## API
 
-| Directory | Purpose |
+| Request | Response |
 | --- | --- |
-| `client/` | React frontend and Vite configuration |
-| `server/` | Express API, Mongoose connection, and example environment settings |
+| `GET /` | API status |
+| `GET /api/listings` | Latest 50 listings, newest first |
+| `POST /api/listings` | Saves a valid title, category, description, and whole-rupee price. Returns the new listing or a validation error. |
 
-Run `npm run build` and `npm run lint` inside `client` to check the frontend. Keep the local `.env` and installed dependencies out of Git.
+## Checks
+
+Run `npm test` in `server` for listing API tests, and `npm run build` and `npm run lint` in `client`. The API tests use an in-memory stand-in for MongoDB.
